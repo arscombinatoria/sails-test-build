@@ -1,0 +1,38 @@
+{
+  "name": "my-sails-sample",
+  "private": true,
+  "version": "0.0.0",
+  "description": "a Sails application",
+  "keywords": [],
+  "dependencies": {
+    "sails": "^1.5.14",
+    "sails-hook-orm": "^4.0.3",
+    "sails-hook-sockets": "^3.0.0",
+    "sails-mysql": "^3.0.1"
+  },
+  "devDependencies": {
+    "@sailshq/lodash": "^3.10.7",
+    "@testing-library/dom": "^10.4.0",
+    "eslint": "5.16.0",
+    "jest": "^30.0.5",
+    "jest-environment-jsdom": "^30.0.5",
+    "jest-extended": "^6.0.0",
+    "supertest": "^7.1.4"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production node app.js",
+    "test": "npm run lint && npm run custom-tests && echo 'Done.'",
+    "lint": "./node_modules/eslint/bin/eslint.js . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look good.'",
+    "custom-tests": "echo \"(No other custom tests yet.)\" && echo"
+  },
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/anonymous node/sails user/my-sails-sample.git"
+  },
+  "author": "anonymous node/sails user",
+  "license": "",
+  "engines": {
+    "node": "^22.17"
+  }
+}
