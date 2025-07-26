@@ -1,5 +1,7 @@
 # my-sails-sample
 
+![Coverage](./coverage/badges.svg)
+
 a [Sails v1](https://sailsjs.com) application
 
 
