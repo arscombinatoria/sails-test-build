@@ -4,6 +4,9 @@
 
 a [Sails v1](https://sailsjs.com) application
 
+When a pull request is updated, the CI workflow runs tests and posts the results
+as a comment.
+
 
 ### Links
 
