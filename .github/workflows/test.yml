@@ -2,7 +2,10 @@ name: CI
 on: push
 jobs:
   test:
+    if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     services:
       mysql:
         image: mysql:8
@@ -17,3 +20,14 @@ jobs:
         with: {node-version: 20}
       - run: npm ci
       - run: npm test
+      - run: npm run coverage
+      - name: Commit coverage badge
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add coverage/badges.svg
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update coverage badge" && git push
+          fi
