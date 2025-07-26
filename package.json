@@ -13,6 +13,7 @@
   "devDependencies": {
     "@sailshq/lodash": "^3.10.7",
     "@testing-library/dom": "^10.4.0",
+    "coverage-badges-cli": "^2.1.0",
     "eslint": "5.16.0",
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
@@ -23,7 +24,8 @@
     "start": "NODE_ENV=production node app.js",
     "test": "jest",
     "lint": "./node_modules/eslint/bin/eslint.js . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look good.'",
-    "custom-tests": "echo \"(No other custom tests yet.)\" && echo"
+    "custom-tests": "echo \"(No other custom tests yet.)\" && echo",
+    "coverage": "jest --coverage --coverageReporters=\"json-summary\" && coverage-badges -o coverage/badges.svg -s coverage/coverage-summary.json"
   },
   "main": "app.js",
   "repository": {
