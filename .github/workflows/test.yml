@@ -6,6 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
     services:
       mysql:
         image: mysql:8
@@ -19,8 +20,36 @@ jobs:
       - uses: actions/setup-node@v4
         with: {node-version: 20}
       - run: npm ci
-      - run: npm test
+      - name: Run tests
+        run: |
+          script -q -e -c "npm test" test-results.log
       - run: npm run coverage
+      - name: Prepare PR comment
+        run: |
+          echo '## Test Results' > test-comment.md
+          cat test-results.log >> test-comment.md
+      - name: Find pull request
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = process.env.GITHUB_REF.replace('refs/heads/', '')
+            const { data: pulls } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: `${context.repo.owner}:${branch}`,
+              state: 'open'
+            })
+            if (pulls.length) {
+              core.setOutput('number', pulls[0].number.toString())
+            }
+      - name: Comment test results
+        if: steps.pr.outputs.number
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ steps.pr.outputs.number }}
+          body-path: test-comment.md
+          edit-mode: replace
       - name: Commit coverage badge
         run: |
           git config user.name github-actions
