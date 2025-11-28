@@ -15,7 +15,7 @@ jobs:
           --health-cmd="mysqladmin ping -ppass -h 127.0.0.1"
           --health-interval=5s --health-retries=5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v4
         with: {node-version: 20}
       - run: npm ci
