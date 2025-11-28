@@ -132,5 +132,4 @@ lib-cov
 *.out
 *.pid
 
-coverage/*
-!coverage/badges.svg
+coverage/

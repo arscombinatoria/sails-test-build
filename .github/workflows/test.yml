@@ -30,15 +30,9 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run coverage
-      - name: Commit coverage badge
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add coverage/badges.svg
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Update coverage badge"
-            git pull --rebase
-            git push
-          fi
+      - name: Upload coverage badge
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-badge
+          path: coverage/badges.svg
+          if-no-files-found: error

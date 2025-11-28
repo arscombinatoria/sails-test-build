@@ -1,6 +1,6 @@
 # my-sails-sample
 
-![Coverage](./coverage/badges.svg)
+Coverage badges are generated during the [CI workflow](.github/workflows/test.yml) and published as workflow artifacts; run `npm run coverage` locally to render `coverage/badges.svg` for a local preview.
 
 a [Sails v1](https://sailsjs.com) application
 
