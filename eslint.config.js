@@ -1,0 +1,76 @@
+const js = require('@eslint/js');
+const globals = require('globals');
+
+module.exports = [
+  {
+    ignores: ['coverage/**', 'eslint.config.js'],
+  },
+  {
+    ...js.configs.recommended,
+    languageOptions: {
+      ...js.configs.recommended.languageOptions,
+      ecmaVersion: 2018,
+      sourceType: 'script',
+      parserOptions: {
+        ...js.configs.recommended.languageOptions?.parserOptions,
+        ecmaFeatures: {
+          ...js.configs.recommended.languageOptions?.parserOptions?.ecmaFeatures,
+          globalReturn: true,
+        },
+      },
+      globals: {
+        ...globals.node,
+        Promise: 'readonly',
+        sails: 'readonly',
+        _: 'readonly',
+      },
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      'block-scoped-var': 'error',
+      'callback-return': ['error', ['done', 'proceed', 'next', 'onwards', 'callback', 'cb']],
+      camelcase: ['warn', { properties: 'always' }],
+      'comma-style': ['warn', 'last'],
+      curly: 'warn',
+      eqeqeq: ['error', 'always'],
+      'eol-last': 'warn',
+      'handle-callback-err': 'error',
+      indent: ['warn', 2, {
+        SwitchCase: 1,
+        MemberExpression: 'off',
+        FunctionDeclaration: { body: 1, parameters: 'off' },
+        FunctionExpression: { body: 1, parameters: 'off' },
+        CallExpression: { arguments: 'off' },
+        ArrayExpression: 1,
+        ObjectExpression: 1,
+        ignoredNodes: ['ConditionalExpression'],
+      }],
+      'linebreak-style': ['error', 'unix'],
+      'no-dupe-keys': 'error',
+      'no-duplicate-case': 'error',
+      'no-extra-semi': 'warn',
+      'no-labels': 'error',
+      'no-mixed-spaces-and-tabs': ['error', 'smart-tabs'],
+      'no-redeclare': 'warn',
+      'no-return-assign': ['error', 'always'],
+      'no-sequences': 'error',
+      'no-trailing-spaces': 'warn',
+      'no-undef': 'off',
+      'no-unexpected-multiline': 'warn',
+      'no-unreachable': 'warn',
+      'no-unused-vars': ['warn', {
+        caughtErrors: 'all',
+        caughtErrorsIgnorePattern: '^unused($|[A-Z].*$)',
+        argsIgnorePattern: '^unused($|[A-Z].*$)',
+        varsIgnorePattern: '^unused($|[A-Z].*$)',
+      }],
+      'no-use-before-define': ['error', { functions: false }],
+      'one-var': ['warn', 'never'],
+      'prefer-arrow-callback': ['warn', { allowNamedFunctions: true }],
+      quotes: ['warn', 'single', { avoidEscape: false, allowTemplateLiterals: true }],
+      semi: ['warn', 'always'],
+      'semi-spacing': ['warn', { before: false, after: true }],
+      'semi-style': ['warn', 'last'],
+    },
+  },
+];
