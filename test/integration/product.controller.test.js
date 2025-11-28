@@ -19,6 +19,10 @@ beforeAll(async () => {
   req = supertest(sails.hooks.http.app);
 });
 
+beforeEach(async () => {
+  await Product.destroy({});
+});
+
 afterAll(async () => {
   if (sailsApp) {
     await new Promise((r) => sailsApp.lower(r));
@@ -31,5 +35,20 @@ describe('GET /products', () => {
     const r = await req.get('/products');
     expect(r.status).toBe(200);
     expect(r.body[0]).toHaveProperty('taxIncluded');
+  });
+});
+
+describe('POST /products', () => {
+  it('creates product', async () => {
+    const product = { name: 'Pen', price: 500 };
+
+    const r = await req.post('/products').send(product);
+
+    expect(r.status).toBe(200);
+    expect(r.body).toMatchObject(product);
+    expect(r.body).toHaveProperty('id');
+
+    const stored = await Product.findOne({ id: r.body.id });
+    expect(stored).toMatchObject(product);
   });
 });
