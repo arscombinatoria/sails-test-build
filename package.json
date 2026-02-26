@@ -17,17 +17,17 @@
     "eslint": "^10.0.2",
     "@eslint/js": "^10.0.1",
     "globals": "^17.3.0",
-    "jest": "^30.2.0",
-    "jest-environment-jsdom": "^30.2.0",
-    "jest-extended": "^7.0.0",
-    "supertest": "^7.2.2"
+    "supertest": "^7.2.2",
+    "vitest": "^2.1.9",
+    "jsdom": "^25.0.1",
+    "@vitest/coverage-v8": "^2.1.9"
   },
   "scripts": {
     "start": "NODE_ENV=production node app.js",
-    "test": "jest",
+    "test": "vitest run",
     "lint": "./node_modules/eslint/bin/eslint.js . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look good.'",
     "custom-tests": "echo \"(No other custom tests yet.)\" && echo",
-    "coverage": "jest --coverage --coverageReporters=\"json-summary\" && coverage-badges -o coverage/badges.svg -s coverage/coverage-summary.json"
+    "coverage": "vitest run --coverage --coverage.reporter=json-summary && coverage-badges -o coverage/badges.svg -s coverage/coverage-summary.json"
   },
   "main": "app.js",
   "repository": {
