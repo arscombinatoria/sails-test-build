@@ -19,7 +19,7 @@
     "globals": "^17.3.0",
     "supertest": "^7.2.2",
     "vitest": "^4.0.18",
-    "jsdom": "^25.0.1",
+    "jsdom": "^28.1.0",
     "@vitest/coverage-v8": "^4.0.18"
   },
   "scripts": {
