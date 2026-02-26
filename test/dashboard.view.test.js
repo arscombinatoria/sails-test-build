@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 
 const path = require('path');
@@ -7,7 +7,7 @@ const path = require('path');
 describe('dashboard view script', () => {
   beforeEach(() => {
     document.body.innerHTML = '<ul id="product-list"></ul>';
-    global.fetch = jest.fn(() =>
+    global.fetch = vi.fn(() =>
       Promise.resolve({
         json: () =>
           Promise.resolve([
@@ -19,7 +19,7 @@ describe('dashboard view script', () => {
   });
 
   afterEach(() => {
-    jest.resetModules();
+    vi.resetModules();
     delete global.fetch;
     document.body.innerHTML = '';
   });
