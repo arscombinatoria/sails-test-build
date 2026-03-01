@@ -16,7 +16,7 @@
     "coverage-badges-cli": "^2.2.0",
     "eslint": "^10.0.2",
     "@eslint/js": "^10.0.1",
-    "globals": "^17.3.0",
+    "globals": "^17.4.0",
     "supertest": "^7.2.2",
     "vitest": "^4.0.18",
     "jsdom": "^28.1.0",
