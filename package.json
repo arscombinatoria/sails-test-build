@@ -27,7 +27,7 @@
     "test": "vitest run",
     "lint": "./node_modules/eslint/bin/eslint.js . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look good.'",
     "custom-tests": "echo \"(No other custom tests yet.)\" && echo",
-    "coverage": "vitest run --coverage --coverage.reporter=json-summary && coverage-badges -o coverage/badges.svg -s coverage/coverage-summary.json"
+    "coverage": "vitest run --coverage --coverage.reporter=json-summary && coverage-badges -o coverage/badges.svg -s coverage/coverage-summary.json --style flat"
   },
   "main": "app.js",
   "repository": {
