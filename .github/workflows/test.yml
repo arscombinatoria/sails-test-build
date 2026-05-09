@@ -5,7 +5,7 @@ jobs:
     if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
     services:
       mysql:
         image: mysql:8
@@ -30,22 +30,3 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run coverage
-      - name: Commit coverage badge
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add coverage/badges.svg
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Update coverage badge"
-            if ! git pull --rebase; then
-              git rebase --abort || true
-              echo "Skipping badge push because rebase conflict occurred."
-              exit 0
-            fi
-            if ! git push; then
-              echo "Skipping badge push because branch was updated concurrently."
-              exit 0
-            fi
-          fi
