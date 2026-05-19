@@ -33,8 +33,16 @@ jobs:
         with:
           # 3系の最新パッチを利用
           python-version: "3.x"
-          # pip キャッシュを有効化してインストールを高速化
-          cache: "pip"
+
+      # requirements.txt / pyproject.toml がないリポジトリでも失敗しないよう
+      # setup-python の pip cache 機能ではなく actions/cache を利用する
+      - name: Cache pip downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-semgrep-${{ hashFiles('.github/workflows/semgrep-reviewdog.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-semgrep-
 
       - name: Install Semgrep
         run: python -m pip install --upgrade semgrep
