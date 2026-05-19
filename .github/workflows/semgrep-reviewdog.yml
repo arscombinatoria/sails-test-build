@@ -15,8 +15,8 @@ jobs:
     runs-on: ubuntu-latest
 
     # 失敗時にCIを止めるかを切替しやすいようにenv化
-    # true: reviewdogが違反を検知してもジョブ継続
-    # false: reviewdogが違反を検知したらジョブ失敗
+    # true: ERROR以上の指摘でジョブ失敗
+    # false: 指摘はコメントのみ（advisory-only）
     env:
       FAIL_ON_FINDINGS: "false"
 
@@ -44,6 +44,12 @@ jobs:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -o pipefail
+
+          REVIEWDOG_FAIL_LEVEL="none"
+          if [ "${FAIL_ON_FINDINGS}" = "true" ]; then
+            REVIEWDOG_FAIL_LEVEL="error"
+          fi
+
           semgrep scan \
             --config auto \
             --json \
@@ -53,6 +59,5 @@ jobs:
               -name="semgrep" \
               -reporter=github-pr-review \
               -filter-mode=diff_context \
-              -fail-level=error \
               -level=warning \
-              -fail-on-error="${FAIL_ON_FINDINGS}"
+              -fail-level="${REVIEWDOG_FAIL_LEVEL}"
