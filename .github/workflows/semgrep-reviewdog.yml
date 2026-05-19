@@ -1,0 +1,65 @@
+name: semgrep-reviewdog
+
+on:
+  pull_request:
+    # PR 作成・更新・再オープン・Draft解除(Ready for review)で実行
+    types: [opened, synchronize, reopened, ready_for_review]
+
+# 最小権限: コード取得(read) + PRレビューコメント(write)
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  semgrep:
+    runs-on: ubuntu-latest
+    # 将来 true/false を切り替えやすいように env 化
+    env:
+      # true: Semgrep の検出を CI 失敗にする / false: コメントのみで失敗させない
+      FAIL_ON_FINDINGS: "false"
+      # Semgrep はフォークPRでも read-only 実行で安全に動作
+      SEMGREP_APP_TOKEN: ""
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+        with:
+          # reviewdog が差分判定するため履歴を取得
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6.2.0
+        with:
+          python-version: "3.x"
+
+      - name: Install Semgrep CLI
+        run: |
+          python -m pip install --upgrade pip
+          pip install semgrep
+
+      - name: Run Semgrep scan
+        # --error を使い、検出時は終了コード1にする（後段で制御）
+        run: |
+          semgrep scan --config auto --json --error > semgrep.json
+        continue-on-error: true
+
+      - name: Install reviewdog
+        uses: reviewdog/action-setup@v1.5.0
+
+      - name: Post findings as PR review comments (diff only)
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          reviewdog \
+            -f=semgrep \
+            -name="semgrep" \
+            -reporter=github-pr-review \
+            -filter-mode=diff_context \
+            -fail-level=error \
+            -level=warning \
+            < semgrep.json
+
+      - name: Fail CI when findings exist (optional)
+        if: env.FAIL_ON_FINDINGS == 'true'
+        run: |
+          semgrep scan --config auto --error
