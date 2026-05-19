@@ -55,10 +55,10 @@ jobs:
 
           semgrep scan \
             --config auto \
-            --json \
+            --sarif \
             . \
           | reviewdog \
-              -f=semgrep \
+              -f=sarif \
               -name="semgrep" \
               -reporter=github-pr-review \
               -filter-mode=diff_context \
