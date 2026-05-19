@@ -31,7 +31,10 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
+          # 3系の最新パッチを利用
+          python-version: "3.x"
+          # pip キャッシュを有効化してインストールを高速化
+          cache: "pip"
 
       - name: Install Semgrep
         run: python -m pip install --upgrade semgrep
