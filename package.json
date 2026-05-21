@@ -11,20 +11,24 @@
     "sails-mysql": "^3.0.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.60.0",
     "@sailshq/lodash": "^3.10.7",
     "@testing-library/dom": "^10.4.1",
+    "@vitest/coverage-v8": "^4.1.2",
     "coverage-badges-cli": "^2.2.0",
     "eslint": "^10.4.0",
-    "@eslint/js": "^10.0.1",
     "globals": "^17.6.0",
-    "supertest": "^7.2.2",
-    "vitest": "^4.1.7",
     "jsdom": "^29.1.1",
-    "@vitest/coverage-v8": "^4.1.2"
+    "supertest": "^7.2.2",
+    "vitest": "^4.1.7"
   },
   "scripts": {
     "start": "NODE_ENV=production node app.js",
     "test": "vitest run",
+    "e2e": "playwright test",
+    "e2e:headed": "playwright test --headed",
+    "e2e:ui": "playwright test --ui",
     "lint": "./node_modules/eslint/bin/eslint.js . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look good.'",
     "custom-tests": "echo \"(No other custom tests yet.)\" && echo",
     "coverage": "vitest run --coverage --coverage.reporter=json-summary && coverage-badges -o coverage/badges.svg -s coverage/coverage-summary.json --style flat"
