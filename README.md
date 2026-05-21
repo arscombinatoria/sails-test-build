@@ -4,6 +4,15 @@
 
 a [Sails v1](https://sailsjs.com) application
 
+### Local E2E setup
+
+Before running Playwright E2E tests locally, install browser binaries and OS dependencies:
+
+```bash
+npx playwright install --with-deps
+```
+
+> In CI, this can be replaced by a dedicated Playwright setup action.
 
 ### Links
 
@@ -25,4 +34,3 @@ This app was originally generated on Fri Jul 25 2025 13:37:51 GMT+0000 (Coordina
 <!--
 Note:  Generators are usually run using the globally-installed `sails` CLI (command-line interface).  This CLI version is _environment-specific_ rather than app-specific, thus over time, as a project's dependencies are upgraded or the project is worked on by different developers on different computers using different versions of Node.js, the Sails dependency in its package.json file may differ from the globally-installed Sails CLI release it was originally generated with.  (Be sure to always check out the relevant [upgrading guides](https://sailsjs.com/upgrading) before upgrading the version of Sails used by your app.  If you're stuck, [get help here](https://sailsjs.com/support).)
 -->
-
