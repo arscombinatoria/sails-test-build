@@ -10,7 +10,7 @@ beforeAll(async () => {
         hooks: { grunt: false },
         log: { level: 'warn' },
         datastores: { default: { adapter: 'sails-disk', inMemoryOnly: true } },
-        port: 0,
+        port: 1338,
       },
       (e) => (e ? rej(e) : res())
     )
