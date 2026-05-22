@@ -13,6 +13,6 @@ module.exports = defineConfig({
     command: 'npm run start:e2e',
     url: 'http://127.0.0.1:1337/dashboard',
     reuseExistingServer: !process.env.CI,
-    timeout: 300 * 1000,
+    timeout: 60 * 1000,
   },
 });
