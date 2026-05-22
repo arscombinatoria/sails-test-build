@@ -29,9 +29,10 @@
     "e2e": "playwright test",
     "e2e:headed": "playwright test --headed",
     "e2e:ui": "playwright test --ui",
-    "lint": "./node_modules/eslint/bin/eslint.js . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look good.'",
+    "lint": "./node_modules/eslint/bin/eslint.js . --max-warnings=0 --report-unused-disable-directives && echo '\u2714  Your .js files look good.'",
     "custom-tests": "echo \"(No other custom tests yet.)\" && echo",
-    "coverage": "vitest run --coverage --coverage.reporter=json-summary && coverage-badges -o coverage/badges.svg -s coverage/coverage-summary.json --style flat"
+    "coverage": "vitest run --coverage --coverage.reporter=json-summary && coverage-badges -o coverage/badges.svg -s coverage/coverage-summary.json --style flat",
+    "start:e2e": "NODE_ENV=test node app.js"
   },
   "main": "app.js",
   "repository": {
