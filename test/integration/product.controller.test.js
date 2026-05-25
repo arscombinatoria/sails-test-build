@@ -53,3 +53,42 @@ describe('POST /products', () => {
     expect(stored).toMatchObject(product);
   });
 });
+
+describe('POST /products validation', () => {
+  it.each([
+    {
+      title: 'rejects request when name is missing',
+      payload: { price: 500 },
+      invalidField: 'name',
+    },
+    {
+      title: 'rejects request when price is missing',
+      payload: { name: 'Pen' },
+      invalidField: 'price',
+    },
+    {
+      title: 'rejects request when price is a string',
+      payload: { name: 'Pen', price: 'abc' },
+      invalidField: 'price',
+    },
+  ])('$title', async ({ payload, invalidField }) => {
+    const r = await req.post('/products').send(payload);
+
+    expect(r.status).toBeGreaterThanOrEqual(400);
+    expect(r.status).toBeLessThan(500);
+
+    expect(r.body).toEqual(
+      expect.objectContaining({
+        error: expect.objectContaining({
+          code: 'E_INVALID_NEW_RECORD',
+          message: expect.any(String),
+          details: expect.any(String),
+        }),
+      }),
+    );
+    expect(r.body.error.details).toContain(`\`${invalidField}\``);
+
+    const stored = await Product.find();
+    expect(stored).toHaveLength(0);
+  });
+});
