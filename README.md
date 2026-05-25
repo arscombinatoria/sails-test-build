@@ -2,6 +2,9 @@
 
 ![Coverage](./coverage/badges.svg)
 
+> Coverage badge (`coverage/badges.svg`) is updated by CI (`.github/workflows/unit-tests.yml`) via `npm run coverage`.
+> If a pull request changes test coverage, regenerate the badge locally with `npm run coverage` and include the updated `coverage/badges.svg` in the commit.
+
 a [Sails v1](https://sailsjs.com) application
 
 ### Local E2E setup
