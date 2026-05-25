@@ -7,15 +7,30 @@
 
 a [Sails v1](https://sailsjs.com) application
 
-### Local E2E setup
+### Playwright E2E setup
 
-Before running Playwright E2E tests locally, install browser binaries and OS dependencies:
+#### Local development
+
+Before running Playwright E2E tests on a local machine, install browser binaries first:
 
 ```bash
-npx playwright install --with-deps
+npx playwright install
 ```
 
-> In CI, this can be replaced by a dedicated Playwright setup action.
+If your local environment does not already include Playwright-required system packages, run:
+
+```bash
+npx playwright install-deps
+```
+
+> `install-deps` is mainly for host-based Linux environments where required OS libraries are missing.
+
+#### CI
+
+- **Docker-based CI (recommended):** use a Playwright-ready container image with dependencies preinstalled. In this case, do **not** run `npx playwright install-deps` in CI.
+- **Host-based CI:** run `npx playwright install` and add `npx playwright install-deps` only when the CI host image does not already include required OS libraries.
+
+This separation avoids unnecessary dependency installation and keeps CI runtime stable.
 
 ### Links
 
