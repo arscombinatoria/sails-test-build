@@ -32,10 +32,27 @@ afterAll(async () => {
 
 describe('GET /products', () => {
   it('responds JSON', async () => {
-    await Product.create({ name: 'Book', price: 1000 });
+    const seedProducts = [
+      { name: 'Book', price: 1000 },
+      { name: 'Pen', price: 500 },
+      { name: 'Notebook', price: 750 },
+    ];
+    const createdProducts = await Product.createEach(seedProducts).fetch();
     const r = await req.get('/products');
+
     expect(r.status).toBe(200);
-    expect(r.body[0]).toHaveProperty('taxIncluded');
+    expect(r.body).toHaveLength(createdProducts.length);
+
+    const sortByName = (a, b) => a.name.localeCompare(b.name);
+    const sortedExpected = [...createdProducts].sort(sortByName);
+    const sortedActual = [...r.body].sort(sortByName);
+
+    sortedActual.forEach((product, index) => {
+      const expected = sortedExpected[index];
+      expect(product.name).toBe(expected.name);
+      expect(product.price).toBe(expected.price);
+      expect(product.taxIncluded).toBeCloseTo(product.price * 1.1);
+    });
   });
 });
 
