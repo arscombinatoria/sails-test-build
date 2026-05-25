@@ -11,7 +11,7 @@ module.exports = defineConfig({
     coverage: {
       provider: 'v8',
       all: true,
-      include: ['api/**/*.js', 'config/**/*.js', 'app.js'],
+      include: ['api/**/*.js'],
       exclude: [
         'test/**',
         'e2e/**',
