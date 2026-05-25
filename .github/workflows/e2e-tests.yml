@@ -35,7 +35,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          PLAYWRIGHT_VERSION=$(node -e "const lock=require('./package-lock.json'); const pkgs=lock.packages||{}; const rootDeps=(lock.packages?.['']?.devDependencies)||{}; const candidates=['@playwright/test','playwright']; let v='unknown'; for (const name of candidates){ if (rootDeps[name] && pkgs[`node_modules/${name}`]?.version){ v=pkgs[`node_modules/${name}`].version; break; } } process.stdout.write(v);")
+          PLAYWRIGHT_VERSION=$(node -e 'const lock=require("./package-lock.json"); const pkgs=lock.packages||{}; const rootDeps=(lock.packages?.[""]?.devDependencies)||{}; const candidates=["@playwright/test","playwright"]; let v="unknown"; for (const name of candidates){ if (rootDeps[name] && pkgs[`node_modules/${name}`]?.version){ v=pkgs[`node_modules/${name}`].version; break; } } process.stdout.write(v);')
           echo "version=${PLAYWRIGHT_VERSION}" >> "$GITHUB_OUTPUT"
       - name: Cache Playwright browsers
         id: playwright-cache
