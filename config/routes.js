@@ -9,7 +9,7 @@
  */
 
 module.exports.routes = {
-  'POST /products': 'ProductController.create',
-  'GET  /products': 'ProductController.list',
-  'GET  /dashboard': {view: 'pages/dashboard'},
+  "POST /products": "ProductController.create",
+  "GET  /products": "ProductController.list",
+  "GET  /dashboard": { view: "pages/dashboard" },
 };
