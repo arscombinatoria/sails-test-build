@@ -2,6 +2,10 @@ name: Unit Tests
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+      - master
 jobs:
   unit-tests:
     if: ${{ github.actor != 'github-actions[bot]' }}
@@ -25,7 +29,14 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install dependencies
         run: npm ci
-      - name: Run unit tests
-        run: npm test
-      - name: Generate coverage report
+      - name: Run unit tests and generate coverage report
         run: npm run coverage
+      - name: Upload coverage artifacts
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+        with:
+          name: coverage-artifacts
+          path: |
+            coverage/coverage-summary.json
+            coverage/badges.svg
+      - name: Ensure committed coverage badge is up-to-date
+        run: git diff --exit-code -- coverage/badges.svg
