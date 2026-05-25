@@ -57,6 +57,50 @@ describe('GET /products', () => {
 });
 
 describe('POST /products', () => {
+
+  describe('validation errors', () => {
+    const invalidCases = [
+      {
+        name: 'missing name',
+        payload: { price: 500 },
+        expectedDetail: 'Missing value for required attribute `name`',
+      },
+      {
+        name: 'missing price',
+        payload: { name: 'Pen' },
+        expectedDetail: 'Missing value for required attribute `price`',
+      },
+      {
+        name: 'price is string',
+        payload: { name: 'Pen', price: 'abc' },
+        expectedDetail: 'wrong type of data for property `price`',
+      },
+    ];
+
+    it.each(invalidCases)('returns fixed error contract for %s and has no side effects', async ({ payload, expectedDetail }) => {
+      const beforeCount = await Product.count();
+
+      const r = await req.post('/products').send(payload);
+
+      expect(r.status).toBe(500);
+      expect(r.body).toEqual(
+        expect.objectContaining({
+          code: 'E_INVALID_NEW_RECORD',
+          isOperational: true,
+          details: expect.stringContaining(expectedDetail),
+          cause: expect.objectContaining({
+            name: 'UsageError',
+            code: 'E_INVALID_NEW_RECORD',
+            details: expect.stringContaining(expectedDetail),
+          }),
+        }),
+      );
+
+      const afterCount = await Product.count();
+      expect(afterCount).toBe(beforeCount);
+    });
+  });
+
   it('creates product', async () => {
     const product = { name: 'Pen', price: 500 };
 
