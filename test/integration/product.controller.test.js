@@ -1,5 +1,5 @@
-const Sails = require("sails").Sails;
-const supertest = require("supertest");
+const Sails = require('sails').Sails;
+const supertest = require('supertest');
 
 let sailsApp;
 let req;
@@ -10,8 +10,8 @@ beforeAll(async () => {
     sailsApp.lift(
       {
         hooks: { grunt: false },
-        log: { level: "warn" },
-        datastores: { default: { adapter: "sails-disk", inMemoryOnly: true } },
+        log: { level: 'warn' },
+        datastores: { default: { adapter: 'sails-disk', inMemoryOnly: true } },
         port: 0,
       },
       (e) => (e ? rej(e) : res()),
@@ -30,24 +30,24 @@ afterAll(async () => {
   }
 });
 
-describe("GET /products", () => {
-  it("responds JSON", async () => {
-    await Product.create({ name: "Book", price: 1000 });
-    const r = await req.get("/products");
+describe('GET /products', () => {
+  it('responds JSON', async () => {
+    await Product.create({ name: 'Book', price: 1000 });
+    const r = await req.get('/products');
     expect(r.status).toBe(200);
-    expect(r.body[0]).toHaveProperty("taxIncluded");
+    expect(r.body[0]).toHaveProperty('taxIncluded');
   });
 });
 
-describe("POST /products", () => {
-  it("creates product", async () => {
-    const product = { name: "Pen", price: 500 };
+describe('POST /products', () => {
+  it('creates product', async () => {
+    const product = { name: 'Pen', price: 500 };
 
-    const r = await req.post("/products").send(product);
+    const r = await req.post('/products').send(product);
 
     expect(r.status).toBe(200);
     expect(r.body).toMatchObject(product);
-    expect(r.body).toHaveProperty("id");
+    expect(r.body).toHaveProperty('id');
 
     const stored = await Product.findOne({ id: r.body.id });
     expect(stored).toMatchObject(product);

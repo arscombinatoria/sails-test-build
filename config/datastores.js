@@ -31,8 +31,8 @@ module.exports.datastores = {
    ***************************************************************************/
 
   default: {
-    adapter: "sails-mysql",
+    adapter: 'sails-mysql',
     url:
-      process.env.MYSQL_URL || "mysql://root:pass@localhost:3306/sails_sample",
+      process.env.MYSQL_URL || 'mysql://root:pass@localhost:3306/sails_sample',
   },
 };
