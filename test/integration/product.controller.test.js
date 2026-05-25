@@ -31,6 +31,15 @@ afterAll(async () => {
 });
 
 describe('GET /products', () => {
+  const sortByName = (a, b) => a.name.localeCompare(b.name);
+
+  it('returns empty array when no products exist', async () => {
+    const r = await req.get('/products');
+
+    expect(r.status).toBe(200);
+    expect(r.body).toEqual([]);
+  });
+
   it('responds JSON', async () => {
     const seedProducts = [
       { name: 'Book', price: 1000 },
@@ -43,7 +52,6 @@ describe('GET /products', () => {
     expect(r.status).toBe(200);
     expect(r.body).toHaveLength(createdProducts.length);
 
-    const sortByName = (a, b) => a.name.localeCompare(b.name);
     const sortedExpected = [...createdProducts].sort(sortByName);
     const sortedActual = [...r.body].sort(sortByName);
 
@@ -52,6 +60,48 @@ describe('GET /products', () => {
       expect(product.name).toBe(expected.name);
       expect(product.price).toBe(expected.price);
       expect(product.taxIncluded).toBeCloseTo(product.price * 1.1);
+    });
+  });
+
+  it('calculates taxIncluded for decimal prices with expected rounding precision', async () => {
+    const created = await Product.create({ name: 'Sticker', price: 99.99 }).fetch();
+
+    const r = await req.get('/products');
+
+    expect(r.status).toBe(200);
+    expect(r.body).toHaveLength(1);
+
+    const sortedExpected = [created].sort(sortByName);
+    const sortedActual = [...r.body].sort(sortByName);
+    const [actual] = sortedActual;
+    const [expected] = sortedExpected;
+
+    expect(actual.name).toBe(expected.name);
+    expect(actual.price).toBe(expected.price);
+    expect(actual.taxIncluded).toBeCloseTo(109.989, 3);
+    expect(actual.taxIncluded).toBeCloseTo(actual.price * 1.1);
+  });
+
+  it('allows zero and negative prices and applies tax calculation consistently', async () => {
+    const seedProducts = [
+      { name: 'DebtCoupon', price: -100 },
+      { name: 'FreeSample', price: 0 },
+    ];
+    const createdProducts = await Product.createEach(seedProducts).fetch();
+
+    const r = await req.get('/products');
+
+    expect(r.status).toBe(200);
+    expect(r.body).toHaveLength(createdProducts.length);
+
+    const sortedExpected = [...createdProducts].sort(sortByName);
+    const sortedActual = [...r.body].sort(sortByName);
+
+    sortedActual.forEach((product, index) => {
+      const expected = sortedExpected[index];
+      expect(product.name).toBe(expected.name);
+      expect(product.price).toBe(expected.price);
+      expect(product.taxIncluded).toBeCloseTo(expected.price * 1.1);
     });
   });
 });
