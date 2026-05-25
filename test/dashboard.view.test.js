@@ -2,36 +2,36 @@
  * @vitest-environment jsdom
  */
 
-const path = require('path');
+const path = require("path");
 
-describe('dashboard view script', () => {
+describe("dashboard view script", () => {
   beforeEach(() => {
     document.body.innerHTML = '<ul id="product-list"></ul>';
     global.fetch = vi.fn(() =>
       Promise.resolve({
         json: () =>
           Promise.resolve([
-            { name: 'Pen', taxIncluded: 110 },
-            { name: 'Book', taxIncluded: 1100 },
+            { name: "Pen", taxIncluded: 110 },
+            { name: "Book", taxIncluded: 1100 },
           ]),
-      })
+      }),
     );
   });
 
   afterEach(() => {
     vi.resetModules();
     delete global.fetch;
-    document.body.innerHTML = '';
+    document.body.innerHTML = "";
   });
 
-  it('renders product list', async () => {
-    const script = path.resolve(__dirname, '../assets/js/views/dashboard.js');
+  it("renders product list", async () => {
+    const script = path.resolve(__dirname, "../assets/js/views/dashboard.js");
     require(script);
     // allow pending promises from fetch chain to resolve
     await new Promise(process.nextTick);
-    expect(document.getElementById('product-list').innerHTML).toBe(
-      '<li>Pen: ¥110</li><li>Book: ¥1100</li>'
+    expect(document.getElementById("product-list").innerHTML).toBe(
+      "<li>Pen: ¥110</li><li>Book: ¥1100</li>",
     );
-    expect(global.fetch).toHaveBeenCalledWith('/products');
+    expect(global.fetch).toHaveBeenCalledWith("/products");
   });
 });
