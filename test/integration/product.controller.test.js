@@ -132,19 +132,12 @@ describe('POST /products', () => {
 
       const r = await req.post('/products').send(payload);
 
-      expect(r.status).toBe(500);
-      expect(r.body).toEqual(
-        expect.objectContaining({
-          code: 'E_INVALID_NEW_RECORD',
-          isOperational: true,
-          details: expect.stringContaining(expectedDetail),
-          cause: expect.objectContaining({
-            name: 'UsageError',
-            code: 'E_INVALID_NEW_RECORD',
-            details: expect.stringContaining(expectedDetail),
-          }),
-        }),
-      );
+      expect(r.status).toBe(400);
+      expect(r.body).toEqual({
+        code: 'E_INVALID_NEW_RECORD',
+        message: 'Invalid product payload',
+        details: expect.stringContaining(expectedDetail),
+      });
 
       const afterCount = await Product.count();
       expect(afterCount).toBe(beforeCount);
