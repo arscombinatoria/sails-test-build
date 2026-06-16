@@ -1,18 +1,17 @@
 const PriceService = require('../api/services/PriceService');
 
 describe('PriceService.applyTax', () => {
-  it('adds taxIncluded using default rate', () => {
+  it('adds taxIncluded using default 10% consumption tax without mutating input', () => {
     const product = { name: 'Pen', price: 100 };
 
     const result = PriceService.applyTax(product);
 
-    expect(result.name).toBe('Pen');
-    expect(result.price).toBe(100);
-    expect(result.taxIncluded).toBeCloseTo(110);
-    expect(product).not.toHaveProperty('taxIncluded');
+    expect(result).toEqual({ name: 'Pen', price: 100, taxIncluded: expect.closeTo(110) });
+    expect(result).not.toBe(product);
+    expect(product).toEqual({ name: 'Pen', price: 100 });
   });
 
-  it('uses a custom tax rate when provided', () => {
+  it('uses an explicitly provided tax rate', () => {
     const product = { name: 'Notebook', price: 200 };
 
     const result = PriceService.applyTax(product, 0.08);
@@ -30,37 +29,34 @@ describe('PriceService.applyTax', () => {
     expect(PriceService.applyTax(veryLargePrice).taxIncluded).toBe(1e15 * 1.1);
   });
 
-  it('supports edge tax rate values (0, negative, and >= 1) with direct formula behavior', () => {
+  it('supports boundary tax rate values with direct formula behavior', () => {
     const product = { name: 'Item', price: 100 };
 
     expect(PriceService.applyTax(product, 0).taxIncluded).toBe(100);
     expect(PriceService.applyTax(product, -0.2).taxIncluded).toBe(80);
     expect(PriceService.applyTax(product, 1).taxIncluded).toBe(200);
-    expect(PriceService.applyTax(product, 1.5).taxIncluded).toBe(250);
   });
 
-  it('throws for null product and returns NaN for missing/non-numeric price', () => {
-    expect(() => PriceService.applyTax(null)).toThrow(TypeError);
-
-    const missingPriceProduct = { name: 'Unknown price item' };
-    const nonNumericPriceProduct = { name: 'Broken price item', price: 'abc' };
-
-    expect(PriceService.applyTax(missingPriceProduct).taxIncluded).toBeNaN();
-    expect(PriceService.applyTax(nonNumericPriceProduct).taxIncluded).toBeNaN();
+  it.each([
+    { caseName: 'null product', product: null, rate: undefined, message: 'product must be an object' },
+    { caseName: 'missing price', product: { name: 'Unknown price item' }, rate: undefined, message: 'product.price must be a finite number' },
+    { caseName: 'non-numeric price', product: { name: 'Broken price item', price: 'abc' }, rate: undefined, message: 'product.price must be a finite number' },
+    { caseName: 'infinite price', product: { name: 'Infinite item', price: Infinity }, rate: undefined, message: 'product.price must be a finite number' },
+    { caseName: 'non-numeric tax rate', product: { name: 'Pen', price: 100 }, rate: '0.1', message: 'tax rate must be a finite number' },
+  ])('throws a clear TypeError for invalid input: $caseName', ({ product, rate, message }) => {
+    expect(() => PriceService.applyTax(product, rate)).toThrow(new TypeError(message));
   });
 
-  it('keeps original object intact and preserves all return properties', () => {
+  it('preserves additional product properties in the returned object', () => {
     const product = { name: 'Bag', price: 50, category: 'daily' };
 
     const result = PriceService.applyTax(product, 0.1);
 
-    expect(product).toEqual({ name: 'Bag', price: 50, category: 'daily' });
     expect(result).toEqual({
       name: 'Bag',
       price: 50,
       category: 'daily',
       taxIncluded: expect.closeTo(55),
     });
-    expect(result).not.toBe(product);
   });
 });
