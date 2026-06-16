@@ -1,13 +1,13 @@
-# Agent Instructions
+# Agent 向け指示
 
-## Test Guidelines
+## テストに関する指針
 
-When adding or modifying tests, follow these rules:
+テストを追加・変更する場合は、以下のルールに従ってください。
 
-- Do not use `skip`, `todo`, or `only` in tests.
-- Do not swallow exceptions. If an error is expected, assert it explicitly.
-- Include at least one meaningful `expect` in every test.
-- Cover not only happy paths, but also error cases and boundary values.
-- Use the specification as the expected value, not the implementation's current behavior.
-- Do not delete or weaken existing tests just to make the test suite pass.
-- Limit mocks to external I/O only.
+- テストで `skip`、`todo`、`only` を使用しないこと。
+- 例外を握りつぶさないこと。エラーが期待される場合は、明示的に検証すること。
+- 各テストには、意味のある `expect` を 1 つ以上含めること。
+- 正常系だけでなく、異常系・境界値も含めて検証すること。
+- 期待値には実装の現在値ではなく、仕様上期待される値を使用すること。
+- テストを通すために、既存テストを削除・緩和しないこと。
+- モックは外部 I/O に限定すること。
